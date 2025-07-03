@@ -14,6 +14,14 @@ class TCS34725():
         g = (data[5] << 8) | data[4]
         b = (data[7] << 8) | data[6]
         return c, r, g, b
+
+    def change_integration_time(self, byte):
+        # 0x00 : 612.4 ms
+        # 0xFF : 2.4 ms
+        if byte < 0x00 or byte > 0xFF:
+            raise ValueError("Integration time byte must be between 0x00 and 0xFF")
+        self.i2c.write_byte(0b10000000|0x01, byte)
+        return
         
         
     

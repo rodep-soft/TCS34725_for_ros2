@@ -6,9 +6,10 @@ from tcs34725.tcs34725 import TCS34725
 
 class ColorPublisher(Node):
 
-    def __init__(self):
+    def __init__(self, integration_time=0x00):
         super().__init__('color_publisher')
         self.TCS34725 = TCS34725(1, 0x29)
+        self.TCS34725.change_integration_time(integration_time)
         self.TCS34725.enable()
         self.publisher_ = self.create_publisher(ColorRGBA, 'color_data', 10)
         timer_period = 0.1  # seconds
@@ -24,10 +25,10 @@ class ColorPublisher(Node):
         msg.a = 1.0  # Alpha channel is not used, set to 0
         self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing: R:{msg.r} G:{msg.g} B:{msg.b} C:{c}')
-
+    
 def main(args=None):
     rclpy.init(args=args)
-    color_publisher = ColorPublisher()
+    color_publisher = ColorPublisher(0xFC)
     rclpy.spin(color_publisher)
     color_publisher.destroy_node()
     rclpy.shutdown()
