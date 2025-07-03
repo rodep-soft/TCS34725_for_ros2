@@ -3,13 +3,11 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import ColorRGBA, Float32
 from tcs34725.tcs34725 import TCS34725
-import random
 
 class ColorPublisher(Node):
 
     def __init__(self):
         super().__init__('color_publisher')
-
         self.TCS34725 = TCS34725(1, 0x29)
         self.TCS34725.enable()
         self.publisher_ = self.create_publisher(ColorRGBA, 'color_data', 10)
