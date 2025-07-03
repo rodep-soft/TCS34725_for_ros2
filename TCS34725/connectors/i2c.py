@@ -10,6 +10,15 @@ class I2C:
 
     def write_byte(self, register, value):
         self.bus.write_byte_data(self.address, register, value)
+    
+    def write_block_data(self, register, datas):
+        self.bus.write_i2c_block_data(self.address, register, datas)
+    
+    def read_block_data(self, register, length):
+        return self.bus.read_i2c_block_data(self.address, register, length)
 
     def close(self):
         self.bus.close()
+
+    def __del__(self):
+        self.close()
