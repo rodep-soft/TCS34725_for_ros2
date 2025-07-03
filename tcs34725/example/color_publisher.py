@@ -16,10 +16,12 @@ class ColorPublisher(Node):
         self.get_logger().info('Color Publisher Node has been started.')
 
     def timer_callback(self):
-        c = Float32()
         msg = ColorRGBA()
-        c, msg.r, msg.g, msg.b = self.TCS34725.read_colors()
-        msg.a = 0  # Alpha channel is not used, set to 0
+        c, r, g, b = self.TCS34725.read_colors()
+        msg.r = r / 65535.0  # Normalize to [0, 1]
+        msg.g = g / 65535.0  # Normalize to [0, 1]
+        msg.b = b / 65535.0  # Normalize to [0, 1]
+        msg.a = 1.0  # Alpha channel is not used, set to 0
         self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing: R:{msg.r} G:{msg.g} B:{msg.b} C:{c}')
 
